@@ -7,7 +7,11 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 
 	<flow name="travelontip-bookingsystemFlow" doc:id="e7abee10-218b-4fff-8e61-82683317199c" >
-		<http:listener doc:name="Listener" doc:id="1a717b1b-e3cf-4674-8d9c-57eb42988f0a" config-ref="HTTP_Listener_config" path="${http.path}"/>
+		<http:listener doc:name="Listener" doc:id="1a717b1b-e3cf-4674-8d9c-57eb42988f0a" config-ref="HTTP_Listener_config" path="${http.path}">
+			<http:error-response statusCode="#[vars.code as Number]" >
+				<http:body ><![CDATA[#[vars.message]]]></http:body>
+			</http:error-response>
+		</http:listener>
 		<set-variable value="#[message.attributes.headers.transactionId default correlationId]" doc:name="Set Transaction ID" doc:id="758b9bfd-fe04-4c1b-9035-b5f32c92bbea" variableName="transactionId"/>
 		<logger level="INFO" doc:name="Logger" doc:id="97d64b5f-4805-42a9-8fc4-5452953f98c0" message=" #[flow.name] started Transaction id is #[vars.transactionId]" />
 		<set-variable value="#[lower(attributes.uriParams.path)]" doc:name="Set Variable choice" doc:id="ddd5ef4d-520a-4ff7-96b1-617ceeeda4a8" variableName="choice"/>
@@ -26,6 +30,25 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 		<error-handler >
 			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="196f7626-b4da-49aa-bfe1-3cff2f48a7f9" >
 				<logger level="INFO" doc:name="Logger" doc:id="f9766d16-c885-4e48-b191-11d638b79bba" message="Error occured in travenontip API"/>
+				<ee:transform doc:name="Transform Message" doc:id="31f61db3-428b-4562-9e3b-21c1046eddcb" >
+					<ee:message >
+					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="message" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message": error.description default "Critical Error",
+	"Code":"501"
+	
+	}
+	]]></ee:set-variable>
+						<ee:set-variable variableName="code" ><![CDATA[%dw 2.0
+output application/json
+---
+501]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
 			</on-error-propagate>
 		</error-handler>
 	</flow>
