@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+
+	<flow name="travelontip-bookingsystemFlow" doc:id="e7abee10-218b-4fff-8e61-82683317199c" >
+		<http:listener doc:name="Listener" doc:id="1a717b1b-e3cf-4674-8d9c-57eb42988f0a" config-ref="HTTP_Listener_config" path="/"/>
+		<logger level="INFO" doc:name="Logger" doc:id="97d64b5f-4805-42a9-8fc4-5452953f98c0" message=" sarted"/>
+	</flow>
+</mule>
