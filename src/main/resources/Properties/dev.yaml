@@ -1,3 +1,9 @@
 http:
   host: "localhost"
   port: "8081"
+  path: "/travelontip/{path}"
+db:
+  host: "localhost"
+  user: "sys as sysdba"
+  password: "Welcome@123"
+  servicename: "xe"

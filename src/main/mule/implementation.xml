@@ -1,5 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd"></mule>
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+
+	<flow name="implementationFlowForRoutes" doc:id="12bd4007-4af5-4455-9d65-c9790f56affb" >
+		<logger level="INFO" doc:name="Logger" doc:id="f68b3ca7-0a0d-40cd-b821-8745c12edc42" message=" #[flow.name] started Transaction id is #[vars.transactionId]"/>
+		<db:select doc:name="Select" doc:id="44bf68f7-033d-454d-90d4-d6c9f7ca637f" config-ref="Database_Config">
+			<db:sql ><![CDATA[select * from routes where companyname='TravelOnTip']]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="8d949b05-6119-44b7-9bcc-0f04be5062a7" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="implementationFlowForSchedules" doc:id="91d236fa-1272-4433-90bd-43728efd5147" >
+		<logger level="INFO" doc:name="Logger" doc:id="69184ade-2540-4f05-8b7b-5c9fd2d7ed6b" message=" #[flow.name] started Transaction id is #[vars.transactionId]"/>
+		<db:select doc:name="Select" doc:id="83017216-8c1b-40d9-bd47-c0e7105e964d" config-ref="Database_Config">
+			<db:sql ><![CDATA[select * from schedules where companyname='TravelOnTip']]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="d27e43af-1f5a-4745-8a54-3b15c8aa22f5" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
